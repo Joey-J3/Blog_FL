@@ -1918,28 +1918,26 @@ A. push ==B. cherry-pick== C. pull D. merge
 
 #### #1、状态码图
 
-![状态码](D:\大三下课程\笔记\计网\状态码.png)
+![状态码](https://github.com/JA-Coding-J/Front-end_FQ/blob/master/images/%E7%8A%B6%E6%80%81%E7%A0%81.png)
 
 
 
 #### #2、浏览器渲染过程图
 
-![浏览器渲染过程](D:\大三下课程\笔记\计网\浏览器渲染过程.png)
+![浏览器渲染过程](https://github.com/JA-Coding-J/Front-end_FQ/blob/master/images/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%B8%B2%E6%9F%93%E8%BF%87%E7%A8%8B.png)
 
 #### #3、CSS选择器优先级顺序
 
-<img src="C:\Users\Lenovo\Desktop\js\css选择器优先级顺序.png" alt="css选择器优先级顺序" style="zoom: 67%;" />
+<img src="https://github.com/JA-Coding-J/Front-end_FQ/blob/master/images/css%E9%80%89%E6%8B%A9%E5%99%A8%E4%BC%98%E5%85%88%E7%BA%A7%E9%A1%BA%E5%BA%8F.png" alt="css选择器优先级顺序" style="zoom: 67%;" />
 
 #### #4、$(document) .ready()与window. onload的时间点
 
-![$(document) .ready()与window. onload的区别](C:\Users\Lenovo\Desktop\js\$(document) .ready()与window. onload的区别.png)
-
-
+![区别](https://github.com/JA-Coding-J/Front-end_FQ/blob/master/images/%24(document)%20.ready()%E4%B8%8Ewindow.%20onload%E7%9A%84%E5%8C%BA%E5%88%AB.png)
 
 #### #5、DNS迭代查询过程
 
-![DNS迭代查询过程](D:\大三下课程\笔记\计网\DNS迭代查询过程.webp)
+![DNS迭代查询过程](https://github.com/JA-Coding-J/Front-end_FQ/blob/master/images/DNS%E8%BF%AD%E4%BB%A3%E6%9F%A5%E8%AF%A2%E8%BF%87%E7%A8%8B.webp)
 
 #### #6、大前端模块化规范
 
-![大前端模块化规范](C:\Users\Lenovo\Desktop\js\大前端模块化规范.webp)
+![大前端模块化规范](https://github.com/JA-Coding-J/Front-end_FQ/blob/master/images/%E5%A4%A7%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E5%8C%96%E8%A7%84%E8%8C%83.webp)

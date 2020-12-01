@@ -146,7 +146,106 @@ CSS媒体查询
 
 `initial-scale` 属性接受一个 0.0-10.0的正数，该数值定义设备宽度（竖屏模式下为`device-width`的值，横屏模式下为`device-height`的值）与视口面积的比值
 
-### 13、CSS 实现多行文本居中
+### 13、CSS 实现居中 [#](#7、CSS 实现水平垂直居中)
+
+#### 1. 水平居中
+
+##### 1. 行内元素
+
+```scss
+div {
+	text-align: center;
+}
+```
+
+##### 2. 块级元素
+
+1. text-align & inline-block **==单个、多个块级元素都能用==**
+
+   ```scss
+   outer{
+       text-align: center;
+       .inner
+       	display: inline-block;
+   }
+   ```
+
+2. flex & justify-content  **==单个、多个块级元素，浮动元素都能用==**
+
+   ```scss
+   outer {
+       display: flex;
+       justify-content: center;
+   }
+   ```
+
+3. width & margin 定宽＋水平auto
+
+   ```scss
+   inner{
+       width: 200px;
+       margin: 0 auto;
+   }
+   ```
+
+4. absolute & transform
+
+   ```scss
+   outer {
+       position: absolute;
+       .inner
+       	position: relative;
+       	left: 50%;
+       	transform: translateX(-50%);
+   }
+   ```
+
+5. flex & margin
+
+   ```scss
+   outer {
+       display: flex;
+       .inner
+       	margin: 0 auto;
+   }
+   ```
+
+6. table & margin
+
+   ```scss
+   inner {
+       display: table;
+       margin: 0 auto;
+   }
+   ```
+
+
+
+##### 3. 多块级元素
+
+1. flex & justify-content
+
+   ```scss
+   outer {
+       display: flex;
+       justify-content: center;
+   }
+   ```
+
+2. inline-block & text-align
+
+   ```scss
+   outer {
+       text-align: center;
+       .inner {
+           display: inline-block;
+       }
+   }
+   ```
+
+   
+
+
 
 1. `display:table-cell`
 
@@ -301,6 +400,7 @@ function add(a, b) {
 
 ### 6、使用let、var和const创建变量有什么区别
 
+- var 声明的变量会挂载到 window 上，而 let 和 const 声明的变量不会。
 - 块级作用域：用`var`声明的变量的作用域是它当前的执行上下文（函数作用域），它可以是嵌套的函数，也可以是声明在任何函数外的变量。let 和 const 的声明范围是块级作用域，意味着它们只能在最近的一组花括号(function、if-else代码块或for循环)中访问。
 - 暂时性死区：var会使变量提升，这意味着变量可以在声明之前使用。而 let 和 const 不会使变量提升，在 let 声明之前的执行瞬间被称为“暂时性死区”，在此阶段引用任何后面才声明的变量都会抛出 ReferenceError。
 - 重复声明：用var重复声明不会报错，但 let 和 const 会。
@@ -596,7 +696,7 @@ console.log(person1.sayName == person2.sayName);	//	"true"
 
 缺点：
 
-所有的实例默认都取得相同的属性；对于数值属性只需要每个实例定义同名属性覆盖就能解决，最大的问题在于引用属性，这个引用属性会被所有实例共享。
+所有的实例默认都取得相同的属性，可以通过在实例上添加同名属性来简单地遮蔽原型上的属性。最大的问题在于引用属性，如果实例上没有覆盖原型上的引用属性，那么原型上的引用属性会被所有实例共享。
 
 1. ###### 理解原型
 
@@ -1081,7 +1181,7 @@ class SuperArray extends Array {
 }
 
 let a1 = new SuperArray(1,2,3,4,5);
-a1.filter(x => !!(x%2))
+let a2 = a1.filter(x => !!(x%2))
 
 console.log(a1);	// [1,2,3,4,5]
 console.log(a2);	// [1,3,5]
@@ -1280,7 +1380,7 @@ Nginx 相当于起了一个跳板机，这个跳板机的域名也是`client.com
 
 #### 3. CommonJs
 
-CommonJs 是服务器端模块的规范，NodeJs 采用了这个规范。
+CommonJs 是服务器端模块的规范，NodeJs 采用了轻微修改版本的 CommonJS 规范。
 
 CommonJs 是同步加载的，它是运行时加载。
 
@@ -1296,6 +1396,7 @@ CommonJs 模块化的规范中，每个文件都是一个模块，拥有独立�
    该规范规定每个模块内部，module 变量表示当前模块，它是一个对象，它的 exports 属性是对外的接口，加载某个模块，其实是加载该模块的 module.exports 属性（该对象只在脚本运行完才会生成）。require命令用于加载模块文件。**require命令的基本功能是，读入并执行一个JavaScript文件，然后返回该模块的exports对象。如果没有发现指定模块，会报错**。
 
 2. 特点：
+
    - 所有代码都运行在模块作用域，不会污染全局作用域
    - 模块可以多次加载，但是只会在第一次加载时运行一次，然后运行结果就被缓存了，以后再加载，就直接读取缓存结果。要想让模块再次运行，必须清除缓存。
    - 模块加载的顺序，按照其在代码中出现的顺序
@@ -1374,22 +1475,23 @@ UMD(Universal Module Definition) 是随着大前端的趋势产生，希望提�
 // if the module has no dependencies, the above pattern can be simplified to
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define([], factory);
+        // AMD。注册为匿名模块
+        define(['moduleB'], factory);
     } else if (typeof exports === 'object') {
-        // Node. Does not work with strict CommonJS, but
-        // only CommonJS-like environments that support module.exports,
-        // like Node.
-        module.exports = factory();
+        // Node。不支持严格 CommonJS
+        // 但可以在 Node 这样支持 module.exports的
+        // 类 CommonJS 环境下使用
+        module.exports = factory(require(' moduleB '));
     } else {
-        // Browser globals (root is window)
-        root.returnExports = factory();
+        // 浏览全局上下文 (root is window)
+        root.returnExports = factory(root.moduleB);
   }
-}(this, function () {
-
-    // Just return a value to define the module export.
-    // This example returns an object, but the module
-    // can return a function as the exported value.
+}(this, function (moduleB) {
+	// 以某种方式使用 moduleB
+    
+    // 将返回值作为模块的导出
+    // 这个例子返回了一个对象
+    // 但是模块也可以返回函数作为导出值
     return {};
 }));
 ```
@@ -1473,7 +1575,7 @@ CommonJS 和 AMD 模块，其本质实在运行时生成一个对象进行导出
 
 3. AMD 的 API 默认是**一个当多个用**，CMD 的 API 严格区分，推崇**职责单一**。比如 AMD 里，require 分局部 require 和全局 require，都叫 require。CMD 里，没有全局 require，而是根据模块系统的完备性，提供 `seajs.use` 来实现模块系统的加载启动。CMD 里，每个 API 都简单纯粹。
 
-   --玉伯
+   
 
 #### 模块化的好处
 
@@ -1516,7 +1618,7 @@ for (const propName in window) {
 
 for-of 语句是一种严格的迭代语句，用于遍历**可迭代对象**的元素。==数组适用于这种迭代语句。==
 
-for-of 循环会按照**可迭代对象**的 next()方法产生值的顺序迭代元素。
+for-of 循环会按照**可迭代对象**的 next() 方法产生值的顺序迭代元素。
 
 #### 4. Difference between `for...of` and `for...in`
 
@@ -1566,7 +1668,7 @@ The `for...of` statement iterates over values that the **iterable object** defin
 
 #### 4	事件处理程序
 
-在HTML需要进行转移的字符：&、"、<、>
+在HTML需要进行转义的字符：&、"、<、>
 
 
 
@@ -1608,6 +1710,22 @@ The `height` CSS property specifies the height of an element. By default the pro
 
 A *callback* is a function that is passed as an argument to another function and is ==**executed after its parent function has completed**==. Callbacks are special because they patiently wait to execute until their parent finishes. Meanwhile, the browser can be executing other functions or doing all sorts of other work.
 
+
+
+### 27、debounce & throttle —— 防抖和节流
+
+#### 1. debounce —— 防抖
+
+策略是当事件被触发时，设定一个周期延迟执行动作，若期间又被触发，则重新设定周期，直到周期结束，执行动作。即只让最后一次生效，前面的不生效。
+
+案例：文本输入的验证（连续输入文字后发送AJAX请求进行验证，验证最后一次就好）
+
+#### 2. throttle —— 节流
+
+策略是固定周期内，只执行一次动作，若有新事件触发，不执行。周期结束后，若有新事件触发，开始新的周期。即一个函数执行一次后，只有大于设定的执行周期后才会执行第二次。
+
+案例：给 resize 事件添加事件监听器，调用回调 fn ，并且在触发后 2s 内不再触发 fn 回调
+
 ### JQuery
 
 #### 1. `$().append()` 和 `$().appendTo()` 的区别
@@ -1644,6 +1762,7 @@ load 在window 上当页面加载完成后触发，在窗套（<feameset>）上�
 window.onload 必须等到页面内包括图片的所有元素和资源加载完毕后才能执行，也就是[图片](#4、$(document) .ready()与window. onload的时间点)中的时间点2； $(document).ready()是DOM加载完毕后就执行，不必等到整个网页资源加载完毕，也就是在上述图片的时间点1。所以，使用document.ready()方法的执行速度比window.onload的方法要快。
 
 
+
 ### 库的使用
 
 #### #ES6-Babel-Browserify使用教程
@@ -1656,10 +1775,9 @@ window.onload 必须等到页面内包括图片的所有元素和资源加载完
 
 ##### 2. browserify
 
-打包工具，将一个js入口文件作为目标，根据目标路径生成一个文件（xxx/bundle.js)，该文件打包入口文件及其所有依赖到一个js文件中
+打包工具，将一个js入口文件作为目标，根据目标路径生成一个文件（xxx/bundle.js)，该文件打包入口文件及其所有依赖到一个js文件中，在浏览器端实现 commonJS 模块化支持
 
 语法：`browserify [Entry(xxx/app.js)] -o [Output(xxx/bundle.js)]`
-
 
 ## 三、网络
 
@@ -1909,7 +2027,7 @@ localStorage.setItem('state', state)
 
 ### 6、VUE3与2在响应式的实现上的区别
 
-vue2采用的使 defineProperty去定义get，set，而vue3改用了proxy。也代表着vue 放弃了兼容ie
+vue2采用的使 defineProperty去定义get，set，而vue3改用了proxy 和 reflect。也代表着vue 放弃了兼容ie
 
 ### 7、像vue-router、vuex他们都是作为vue插件，请说一下他们分别都是如何在vue中生效的？
 
@@ -1919,9 +2037,125 @@ vue2采用的使 defineProperty去定义get，set，而vue3改用了proxy。也�
 
 vue2采用的是典型的混入式架构，类似于express和jquery，各部分分模块开发，再通过一个mixin去混入到最终暴露到全局的类上。
 
-
+### 9、如果在 Vue 项目中用 Ajax 异步更新数据，应该在哪个生命周期实现
 
 ## 五、浏览器
+
+### 1、浏览器缓存 [link](#8、浏览器缓存)
+
+#### 1. 缓存位置
+
+1. Service Worker
+
+   Service Worker 的缓存与浏览器其他内建的缓存机制不同，它可以让我们自由控制缓存哪些文件、如何匹配缓存、如何读取缓存，并且缓存是持续性的。
+
+2. Memory Cache
+
+   存储在内存中的缓存，主要包含的是已经抓取到的资源，例如页面上下载的样式、脚本、图片等。
+
+   内存缓存虽然高效，但是缓存持续性短，**一旦关闭 Tab 页面，缓存就被释放**。
+
+3. Disk Cache
+
+   存储在硬盘中的缓存，读取速度慢点，但是什么都能存储到磁盘中。比 Memory Cache 胜在容量和存储时效上。
+
+   在所有浏览器缓存中，Disk Cache 覆盖面基本是最大的。它会根据 HTTP Request 中的字段判断哪些资源需要缓存，哪些资源可以不需要请求直接使用，哪些资源已经过期需要重新请求。并且即使在跨站点请求的情况下，相同地址的资源一旦被硬盘缓存下来，就不会再次去请求数据。绝大部分缓存都来自 Disk Cache。
+
+   **浏览器会把哪些文件丢进内存中？哪些丢进硬盘中？**
+
+   - 对于大文件来说，大概率是不存储在内存中的，反之优先
+   - 当前系统内存使用率高的话，文件优先存储进硬盘
+
+4. Push Cache
+
+
+
+#### 2. 强缓存
+
+不会向服务器发送请求，直接从缓存中读取资源，请求返回 200 状态码，并且 size 显示 from disk cache 和 from memory cache。
+
+强缓存判断是否缓存的依据来自于**是否超过某个时间或者某个时间段**，而不关心服务器是否更新。
+
+Cache-Control 优先级比 Expires 高。
+
+##### Cache-Control
+
+是 HTTP/1.1 的产物
+
+- no-cache：不使用强缓存，使用缓存则需要经过协商缓存来验证决定；即需要验证是否需要更新数据
+- no-store：不适用任何缓存
+- must-revalidate：如果配置了 max-age 信息，当缓存仍然小于 max-age 时使用缓存，否则需要对资源进行验证。
+- public：所有内容都将被缓存（客户端和代理服务器都可缓存）
+- private：所有内容都只有客户端进行缓存
+- max-age：`max-age=xxx` 表示缓存内容在 xxx 秒后失效
+
+##### Expires
+
+是 HTTP/1.0 的产物，是过时的产物，现阶段它的存在是一种兼容性的写法，在某些不支持 HTTP/1.1 的环境下，Expires 就会发挥用处。
+
+#### 3. 协商缓存
+
+强制缓存失效后，浏览器携带**缓存标识**向服务器发起请求，**由服务器根据缓存标识决定**是否使用缓存的过程就是协商缓存。主要有以下两种情况：
+
+- 协商缓存生效就返回 304 状态码和 Not Modified
+- 协商缓存失效就返回 200 状态码和请求结果
+
+可以通过设置 Request Header 中添加 Last-Modified 或 Etag 实现。 
+
+##### Last-Modified & If-Modified-Since
+
+浏览器在第一次访问资源时，服务器返回资源的同时，在 `response header` 中添加 `Last-Modified` 的header，**值是这个资源在这个服务器上的最后修改时间**，浏览器接受后缓存文件和 header。浏览器下一次请求这个资源，检测到有 Last-Modified 这个 header，于是添加 ==If-Modified-Since== 这个header，值就是 `Last-Modified` 中的值；浏览器再次收到这个资源请求，会根据 `If-Modified-Since` 中的值与服务器中这个资源的最后修改时间进行对比。如果没有变化，返回 304 和空的响应体，直接从缓存中获取；反之，如果 `If-Modified-Since` 中的值小于服务器中这个资源的最后修改时间，说明文件有更新，于是返回资源文件和 200。
+
+缺点：
+
+- 如果本地打开缓存文件，即使文件没有被修改，还是会造成 `Last-Modified` 被修改，服务端不能命中缓存导致发送同样的资源
+- 因为 `Last-Modified` 只能以秒计时，如果在不可感知的时间内修改完成文件，那么服务器还是会认为资源命中，不会返回正确的资源
+
+##### Etag & If-None-Match
+
+**Etag** 是服务器响应请求时，返回当前文件的一个唯一标识，只要资源有变化，Etag 就会重新生成。浏览器在下一次加载资源向服务器发送请求时，会将上一次返回的 Etag 值放到 Request header 里的 ==If-None-Match== 字段中，服务器只需要比较该值是否与服务器上该资源的 Etag 值是否一致，就能很好的判断资源相对客户端而言是否被修改过。如果服务器发现 Etag 匹配不上，那么直接以常规的 GET 200 回包形式将新的资源（包括新的 Etag）发给客户端；如果 Etag 是一致的，则直接返回 304 知会客户端直接使用本地缓存即可。
+
+##### 两者的优劣差异：
+
+- 首先在精度上，Etag 要优于 Last-Modified，Last-Modified 时间单位是秒，如果某个文件在1s内改变了多次，那么他们的 Last-Modified 并不会体现出被修改；但是 Etag 每次都会改变确保了精度；如果是负载均衡的服务器，各个服务器产生的 Last-Modified 也有可能不一致。
+- 其次是在性能上，Etag 要逊于 Last-Modified，毕竟后者只需要记录时间，而前者需要服务器通过算法计算出一个 hash 值。
+- 第三体现在优先级上，服务器校验有限考虑 Etag。
+
+
+
+#### 4. 缓存机制
+
+强制缓存优先于协商缓存，若强制缓存失效则使用协商缓存。协商缓存是否生效由服务器决定，若失效则服务器返回 200，重新返回资源和缓存标识，再存入浏览器缓存中；若生效则返回 304，继续使用缓存。[link](#9、浏览器缓存机制)
+
+
+
+#### 5. 实际场景应用缓存策略
+
+##### (1) 频繁变动的资源
+
+```
+Cache-Control: no-cache
+```
+
+不使用强缓存，每次请求服务器，配合 `Etag` 或 `Last-Modified` 来验证资源是否有效。这种做法虽然不能减少请求数量，但是能显著减少响应数据大小。
+
+##### (2) 不常变化的资源
+
+```
+Cache-Control: max-age=31536000
+```
+
+使用强制缓存，并给它们的 `Cache-Control` 设置一个很大的 `max-age=31536000(一年)`。为了解决更新的问题，就需要在文件名（或者路径）中添加 hash，版本号等字符，之后更改动态字符，达到更改引用的 URL 的目的，使用新的资源文件
+
+6、用户行为对浏览器缓存的影响
+
+所谓用户行为对浏览器缓存的影响，指的就是用户在浏览器如何操作时，会触发怎样的缓存策略。主要有 3 种：
+
+- 打开网页，地址栏输入地址： 查找 disk cache 中是否有匹配。如有则使用；如没有则发送网络请求。
+- 普通刷新 (F5)：因为 TAB 并没有关闭，因此 memory cache 是可用的，会被优先使用(如果匹配的话)。其次才是 disk cache。
+- 强制刷新 (Ctrl + F5)：浏览器不使用缓存，因此发送的请求头部均带有 `Cache-control: no-cache`(为了兼容，还带了 `Pragma: no-cache`),服务器直接返回 200 和最新内容。
+
+
 
 ### #17、Reflows & Repaints
 
@@ -1935,7 +2169,7 @@ Examples that cause reflows include: adding or removing content, explicitly or i
 
 ​																																					——StackOverFlow
 
-### 
+
 
 ### #21、浏览器解析渲染页面
 
@@ -1949,7 +2183,7 @@ Examples that cause reflows include: adding or removing content, explicitly or i
 
 ### 1、编写一个函数，该函数返回一个字符串的第一个只出现一次的字符
 
-### 2、编写一个函数，该函数通过二分法将数组升序排序
+### 2、编写一个函数，该函数通过二分法将数组升序排序（大的放右边，小的放左边）
 
 ### 3、用递归方法手写深拷贝，要同时考虑循环引用的情况
 
@@ -2004,7 +2238,9 @@ B. 可以用 translate3D 来触发GPU加速动画效果
 
 C. viewport的 initial-scale=1.0 表示网页初始大小占屏幕100%
 
-D. 移动设备横竖屏翻转，页面不会出现重绘
+==D. 移动设备横竖屏翻转，页面不会出现重绘==
+
+
 
 #### 指定Git分支的若干个提交合并到主分支的命令是
 
@@ -2022,13 +2258,55 @@ A. push ==B. cherry-pick== C. pull D. merge
 
 [5] Opera (原为Presto内核，现为Blink内核)
 
+
+
+#### CSS中怎么实现垂直居中？
+
+display: table-ceil，这种布局会造成性能损耗
+
+绝对布局怎么实现？
+
+line-height 对块级元素无效怎么办？
+
+#### 为什么css选择器从右向左解析？
+
+#### 自执行函数的好处？
+
+#### 模块化的好处？
+
+#### 微任务和宏任务
+
+先执行微任务，再执行宏任务；
+
+await 语句会把修饰的语句放到微任务队列中，Promise的then和catch回调会被放到微任务队列中。setTimeout 会被放到宏任务队列中。
+
+#### 事件循环
+
+#### 合成渲染树之后？
+
+计算布局尺寸。。。
+
+#### 讲一下浏览器缓存和 HTTP 缓存
+
+关于 cookie 的问题，为什么用户在关闭页面之后，重新打开页面仍然保持登录状态。
+
+#### Vue SSR渲染
+
+#### Vue 生命周期
+
+#### 定义一个函数，判断一个数是否为2的幂次方？怎么优化？(二进制方式)
+
+#### 定义一个函数，用于解析url的query
+
+#### 页面攻击
+
+#### H5在移动端的作用和以及移动端自适应
+
 ## 附录
 
 #### #1、状态码图
 
 ![状态码](https://github.com/JA-Coding-J/Front-end_FQ/blob/master/images/%E7%8A%B6%E6%80%81%E7%A0%81.png)
-
-
 
 #### #2、浏览器渲染过程图
 

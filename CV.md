@@ -27,8 +27,8 @@
   - 项目描述：XXX 提供了无纸化办公平台，包括供应商和租户的信息管理以及公司项目的招投标。项目基于敏捷的 Scrum 方法，使用 JIRA 工具进行管理。
   - 项目架构：采用前后端分离的架构方式。前端的技术栈包括 Vue / Vuex / Vue-Router / Cypress / Jest / Webpack。服务端技术栈包括 Koa / Sequelize / SQL Server / Jest。Global 的主要技术栈包括 TypeScript / NestJS / React / React-Router / Vite。项目接入了 Azure 云服务，接入 AD 登录和云存储等功能，基于 Gitlab CI / CD 实现项目持续集成与部署。
   - 工作：担任软件开发工程师，主要工作是全栈开发
-    - 负责 E-Circular Recipient 模块，重构树状多选列表组件，页面响应速度提升 50%
-    - 负责重构 node 服务请求分发中间件，利用策略模式使得代码更易理解、可扩展性提升了 10%
+    - 负责 E-Circular Recipient 模块，重构树状多选列表组件，提升页面响应速度
+    - 负责重构 node 服务请求分发中间件，利用策略模式使得代码更易理解、提升可扩展性
     - 遵循代码规范，并积极地对旧代码进行重构，代码可复用性提高 10%
     - 负责完善服务端的单元测试，coverage 从原来的 50% 提升到了在 70% 以上；解决了 Jest 中无法 mock 的问题
     - 根据需求、UI 编写高质量高性能的代码、完成前端页面开发以及数据交互；完成 API 接口开发，并完成自测
